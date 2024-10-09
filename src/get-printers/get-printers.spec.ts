@@ -120,6 +120,7 @@ it("returns list of available printers with custom properties", async () => {
   PaperSizesSupported         : {1, 1, 1, 1...}
   PortName                    : USB001
   PrinterPaperNames           : {A4, 144mm x 100mm, 2 x 4, 4 x 4...}
+  AllPrinterPaperNames           : {A4, 144mm x 100mm, 2 x 4, 4 x 4}
   
   `;
 

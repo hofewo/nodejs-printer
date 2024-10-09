@@ -74,6 +74,7 @@ it("gets the default printer with custom and repeated properties", async () => {
   PaperSizesSupported         : {1, 1, 1, 1...}
   PortName                    : USB001
   PrinterPaperNames           : {A4, 144mm x 100mm}
+  AllPrinterPaperNames        : {A4, 144mm x 100mm}
   
   `;
 

@@ -8,7 +8,7 @@ async function getPrinters(): Promise<Printer[]> {
     const printers: Printer[] = [];
 
     stdout
-      .split(/(\r?\n){2,}/)
+      .split(/(\r?\n){2,}/) // Split by double line breaks to separate each printer.
       .map((printer) => printer.trim())
       .filter((printer) => !!printer)
       .forEach((printer) => {
@@ -26,7 +26,19 @@ async function getPrinters(): Promise<Printer[]> {
     throwIfUnsupportedOperatingSystem();
     const { stdout } = await execFileAsync("Powershell.exe", [
       "-Command",
-      `Get-CimInstance Win32_Printer -Property DeviceID,Name,PrinterPaperNames`,
+      `Get-CimInstance Win32_Printer -Property DeviceID,Name,PrinterPaperNames | ForEach-Object {
+    # Create a new PSCustomObject to store the desired properties
+    $printerObject = [PSCustomObject]@{
+        Status                      = $_.Status
+        Name                        = $_.Name
+        DeviceID                    = $_.DeviceID
+        PrinterPaperNames           = $_.PrinterPaperNames
+        AllPrinterPaperNames  = "{" + ($_.PrinterPaperNames -join ", ") + "}"
+    }
+    # Convert the object to a string with a specified width
+    $printerObject | Out-String -Width 32767
+}
+`,
     ]);
     return stdoutHandler(stdout);
   } catch (error) {

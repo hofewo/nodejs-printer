@@ -4,7 +4,7 @@ import { Printer } from "../index";
 const properties: { [key: string]: keyof Printer } = {
   DeviceID: "deviceId",
   Name: "name",
-  PrinterPaperNames: "paperSizes",
+  AllPrinterPaperNames: "paperSizes",
 };
 
 export default function isValidPrinter(printer: string): {
@@ -20,14 +20,15 @@ export default function isValidPrinter(printer: string): {
   printer.split(/\r?\n/).forEach((line) => {
     let [label, value] = line.split(":").map((el) => el.trim());
 
-    // handle array dots
-    if (value.match(/^{(.*)(\.{3})}$/)) {
+    // handle array dots (e.g. {1, 1, 1, 1...})
+    if (value?.match(/^{(.*)(\.{3})}$/)) {
       value = value.replace("...}", "}");
     }
 
-    // handle array returns
-    const matches = value.match(/^{(.*)}$/);
+    // handle array returns (e.g. {A4, 144mm x 100mm})
+    const matches = value?.match(/^{(.*)}$/);
 
+    // if array return is not empty, split the string to an array
     if (matches && matches[1]) {
       // @ts-ignore
       value = matches[1].split(", ");
