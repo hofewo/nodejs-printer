@@ -1,30 +1,21 @@
 # Node.js printing
 
-[![Build Status](https://api.cirrus-ci.com/github/artiebits/pdf-to-printer.svg)](https://cirrus-ci.com/github/artiebits/pdf-to-printer)
-[![codecov](https://codecov.io/gh/artiebits/pdf-to-printer/branch/master/graph/badge.svg)](https://codecov.io/gh/artiebits/pdf-to-printer)
-![npm](https://img.shields.io/npm/dw/pdf-to-printer)
-
 A utility for printing PDFs and images from Node.js and Electron.
 
-- Available only on Windows. The Unix-like operating systems utility can be found on https://github.com/artiebits/unix-print.
-- It supports label printers like Rollo and Zebra.
-
-## Support This Project
-
-If you rely on this package, please consider supporting it. Maintaining an open source project takes time and your support would be greatly appreciated.
-
-<a href="https://www.buymeacoffee.com/artiebits" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 50px !important;width: 207px !important;" ></a>
+- This repository is a continuation of artiebits' pdf-to-printer library (https://github.com/artiebits/pdf-to-printer).
+- Currently available only on Windows.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Installation](#installation)
-- [Basic Usage](#basic-usage)
-- [API](#api)
-  - [`.print(pdf[, options]) => Promise<void>`](#printpdf-options--promisevoid)
-  - [`.getPrinters() => Promise<Printer[]>`](#getprinters--promiseprinter)
-  - [`.getDefaultPrinter() => Promise<Printer | null>`](#getdefaultprinter--promiseprinter--null)
-- [License](#license)
+- [Node.js printing](#nodejs-printing)
+  - [Installation](#installation)
+  - [Basic Usage](#basic-usage)
+  - [API](#api)
+    - [`.print(pdf[, options]) => Promise<void>`](#printpdf-options--promisevoid)
+    - [`.getPrinters() => Promise<Printer[]>`](#getprinters--promiseprinter)
+    - [`.getDefaultPrinter() => Promise<Printer | null>`](#getdefaultprinter--promiseprinter--null)
+  - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -33,13 +24,13 @@ If you rely on this package, please consider supporting it. Maintaining an open 
 You can install the package using `npm`:
 
 ```bash
-npm install --save pdf-to-printer
+npm install --save nodejs-printer
 ```
 
 Or `yarn`
 
 ```bash
-yarn add pdf-to-printer
+yarn add nodejs-printer
 ```
 
 ## Basic Usage
@@ -47,7 +38,7 @@ yarn add pdf-to-printer
 To print a file to the default printer:
 
 ```javascript
-import { print } from "pdf-to-printer";
+const { print } = require("nodejs-printer");
 
 print("assets/sample.pdf").then(console.log);
 ```
@@ -84,7 +75,7 @@ A function that prints your file.
 To print a file to the default printer, use the following code:
 
 ```javascript
-import { print } from "pdf-to-printer";
+const { print } = require("nodejs-printer");
 
 print("assets/sample.pdf").then(console.log);
 ```
@@ -92,7 +83,7 @@ print("assets/sample.pdf").then(console.log);
 To print to a specific printer:
 
 ```javascript
-import { print } from "pdf-to-printer";
+const { print } = require("nodejs-printer");
 
 const options = {
   printer: "Zebra",
@@ -104,7 +95,7 @@ print("assets/pdf-sample.pdf", options).then(console.log);
 Here is an example with a few print settings. It will print pages 1, 3, and 5, and scale them so that they fit into the printable area of the paper.
 
 ```javascript
-import { print } from "pdf-to-printer";
+const { print } = require("nodejs-printer");
 
 const options = {
   printer: "Zebra",
@@ -126,7 +117,7 @@ A function to get a list of available printers.
 **Examples**
 
 ```javascript
-import { getPrinters } from "pdf-to-printer";
+const { getPrinters } = require("nodejs-printer");
 
 getPrinters().then(console.log);
 ```
@@ -142,7 +133,7 @@ A function to get the default printer information.
 **Examples**
 
 ```javascript
-import { getDefaultPrinter } from "pdf-to-printer";
+const { getDefaultPrinter } = require("nodejs-printer");
 
 getDefaultPrinter().then(console.log);
 ```
