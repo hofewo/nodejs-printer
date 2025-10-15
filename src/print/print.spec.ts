@@ -5,6 +5,7 @@ import execAsync from "../utils/exec-file-async";
 import fixPathForAsarUnpack from "../utils/electron-util";
 import print from "./print";
 
+jest.mock("os");
 jest.mock("fs");
 jest.mock("path");
 jest.mock("../utils/exec-file-async");
@@ -21,6 +22,8 @@ beforeEach(() => {
   mockedExistsSync.mockImplementation(() => true);
   mockedExecAsync.mockResolvedValue({ stdout: "", stderr: "" });
   mockedJoin.mockImplementation((_, filename) => "mocked_path_" + filename);
+  const os = require("os");
+  os.platform.mockImplementation(() => "win32");
 });
 
 afterEach(() => {
