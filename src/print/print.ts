@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import os from "os";
 import execAsync from "../utils/exec-file-async";
 import fixPathForAsarUnpack from "../utils/electron-util";
 import throwIfUnsupportedOperatingSystem from "../utils/throw-if-unsupported-os";
@@ -33,6 +34,120 @@ export default async function print(
   if (!pdf) throw "No PDF specified";
   if (!fs.existsSync(pdf)) throw "No such file";
 
+  const platform = os.platform();
+
+  // macOS implementation using CUPS `lp`
+  if (platform === "darwin") {
+    const {
+      printer,
+      pages,
+      subset,
+      orientation,
+      scale,
+      monochrome,
+      side,
+      bin,
+      paperSize,
+      printDialog,
+      copies,
+    } = options;
+
+    if (printDialog) {
+      throw "printDialog option is not supported on macOS";
+    }
+
+    const lpArgs: string[] = [];
+
+    if (printer) {
+      lpArgs.push("-d", printer);
+    }
+
+    if (copies && copies > 0) {
+      lpArgs.push("-n", String(copies));
+    }
+
+    // Collect -o options
+    const oOptions: string[] = [];
+
+    if (pages) {
+      // CUPS supports page ranges via page-ranges option
+      oOptions.push(`page-ranges=${pages}`);
+    }
+
+    if (subset) {
+      if (subset === "odd" || subset === "even") {
+        oOptions.push(`page-set=${subset}`);
+      } else {
+        throw `Invalid subset provided. Valid names: ${validSubsets.join(
+          ", "
+        )}`;
+      }
+    }
+
+    if (orientation) {
+      if (validOrientations.includes(orientation)) {
+        // CUPS accepts 'landscape'/'portrait' as short-hands
+        oOptions.push(orientation);
+      } else {
+        throw `Invalid orientation provided. Valid names: ${validOrientations.join(
+          ", "
+        )}`;
+      }
+    }
+
+    if (scale) {
+      if (!validScales.includes(scale)) {
+        throw `Invalid scale provided. Valid names: ${validScales.join(", ")}`;
+      }
+      if (scale === "fit" || scale === "shrink") {
+        oOptions.push("fit-to-page");
+      }
+    }
+
+    if (monochrome === true) {
+      oOptions.push("ColorModel=Gray");
+    } else if (monochrome === false) {
+      oOptions.push("ColorModel=RGB");
+    }
+
+    if (side) {
+      if (!validSides.includes(side)) {
+        throw `Invalid side provided. Valid names: ${validSides.join(", ")}`;
+      }
+      const sidesMap: Record<string, string> = {
+        duplex: "sides=two-sided-long-edge",
+        duplexshort: "sides=two-sided-short-edge",
+        duplexlong: "sides=two-sided-long-edge",
+        simplex: "sides=one-sided",
+      };
+      oOptions.push(sidesMap[side]);
+    }
+
+    if (bin) {
+      // Best-effort mapping; actual values depend on printer PPD
+      oOptions.push(`InputSlot=${bin}`);
+    }
+
+    if (paperSize) {
+      oOptions.push(`media=${paperSize}`);
+    }
+
+    // Append collected -o options
+    oOptions.forEach((opt) => {
+      lpArgs.push("-o", opt);
+    });
+
+    lpArgs.push(pdf);
+
+    try {
+      await execAsync("lp", lpArgs);
+    } catch (error) {
+      throw error;
+    }
+    return;
+  }
+
+  // Windows implementation using SumatraPDF
   let sumatraPdf =
     options.sumatraPdfPath || path.join(__dirname, "SumatraPDF-3.4.6-32.exe");
   if (!options.sumatraPdfPath) sumatraPdf = fixPathForAsarUnpack(sumatraPdf);
