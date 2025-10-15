@@ -14,11 +14,16 @@ it("does not throw on Windows", () => {
   expect(() => throwIfUnsupportedOs()).not.toThrowError();
 });
 
-["linux", "darwin", "test"].forEach((platform) => {
+["linux", "test"].forEach((platform) => {
   it(`throws on unsupported platform ${platform}`, () => {
     os.platform.mockImplementation(() => platform);
     expect(() => throwIfUnsupportedOs()).toThrowError(
       "Operating System not supported"
     );
   });
+});
+
+it("does not throw on macOS", () => {
+  os.platform.mockImplementation(() => "darwin");
+  expect(() => throwIfUnsupportedOs()).not.toThrowError();
 });
