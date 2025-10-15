@@ -24,7 +24,13 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyPlugin({ patterns: [{ from: "./src/SumatraPDF-3.4.6-32.exe" }] }),
+    new CopyPlugin({
+      patterns: [
+        { from: "./src/SumatraPDF-3.4.6-32.exe" },
+        // Provide ESM wrapper alongside CJS bundle for import compatibility
+        { from: "./scripts/index.mjs", to: "index.mjs" },
+      ],
+    }),
   ],
   target: "node",
   node: {
