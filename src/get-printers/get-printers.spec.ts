@@ -3,9 +3,15 @@ import { Printer } from "..";
 import execAsync from "../utils/exec-file-async";
 import getPrinters from "./get-printers";
 
+jest.mock("os");
 jest.mock("../utils/throw-if-unsupported-os");
 jest.mock("../utils/exec-file-async");
 const mockedExecAsync = mocked(execAsync);
+
+beforeEach(() => {
+  const os = require("os");
+  os.platform.mockImplementation(() => "win32");
+});
 
 afterEach(() => {
   // restore the original implementation
