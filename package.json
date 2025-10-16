@@ -1,6 +1,6 @@
 {
   "name": "nodejs-printer",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A utility for printing PDFs and images from Node.js and Electron.",
   "license": "MIT",
   "repository": {
