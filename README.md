@@ -37,8 +37,16 @@ yarn add nodejs-printer
 
 To print a file to the default printer:
 
+**CommonJS:**
 ```javascript
 const { print } = require("nodejs-printer");
+
+print("assets/sample.pdf").then(console.log);
+```
+
+**ES Modules:**
+```javascript
+import { print } from "nodejs-printer";
 
 print("assets/sample.pdf").then(console.log);
 ```
@@ -74,14 +82,23 @@ A function that prints your file.
 
 To print a file to the default printer, use the following code:
 
+**CommonJS:**
 ```javascript
 const { print } = require("nodejs-printer");
 
 print("assets/sample.pdf").then(console.log);
 ```
 
+**ES Modules:**
+```javascript
+import { print } from "nodejs-printer";
+
+print("assets/sample.pdf").then(console.log);
+```
+
 To print to a specific printer:
 
+**CommonJS:**
 ```javascript
 const { print } = require("nodejs-printer");
 
@@ -92,10 +109,35 @@ const options = {
 print("assets/pdf-sample.pdf", options).then(console.log);
 ```
 
+**ES Modules:**
+```javascript
+import { print } from "nodejs-printer";
+
+const options = {
+  printer: "Zebra",
+};
+
+print("assets/pdf-sample.pdf", options).then(console.log);
+```
+
 Here is an example with a few print settings. It will print pages 1, 3, and 5, and scale them so that they fit into the printable area of the paper.
 
+**CommonJS:**
 ```javascript
 const { print } = require("nodejs-printer");
+
+const options = {
+  printer: "Zebra",
+  pages: "1-3,5",
+  scale: "fit",
+};
+
+print("assets/pdf-sample.pdf", options).then(console.log);
+```
+
+**ES Modules:**
+```javascript
+import { print } from "nodejs-printer";
 
 const options = {
   printer: "Zebra",
@@ -116,8 +158,16 @@ A function to get a list of available printers.
 
 **Examples**
 
+**CommonJS:**
 ```javascript
 const { getPrinters } = require("nodejs-printer");
+
+getPrinters().then(console.log);
+```
+
+**ES Modules:**
+```javascript
+import { getPrinters } from "nodejs-printer";
 
 getPrinters().then(console.log);
 ```
@@ -132,8 +182,16 @@ A function to get the default printer information.
 
 **Examples**
 
+**CommonJS:**
 ```javascript
 const { getDefaultPrinter } = require("nodejs-printer");
+
+getDefaultPrinter().then(console.log);
+```
+
+**ES Modules:**
+```javascript
+import { getDefaultPrinter } from "nodejs-printer";
 
 getDefaultPrinter().then(console.log);
 ```
