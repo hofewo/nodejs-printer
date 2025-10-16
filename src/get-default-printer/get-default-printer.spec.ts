@@ -12,7 +12,6 @@ beforeEach(() => {
   os.platform.mockImplementation(() => "win32");
 });
 
-
 const mockDefaultPrinterStdout = `
 
 Status                      :
